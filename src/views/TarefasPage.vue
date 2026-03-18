@@ -1,63 +1,116 @@
 <template>
-    <IonPage>
-        <IonHeader>
-            <IonToolbar>
-                <IonBackButton class="back-button" defaultHref="/home"/>
-                <IonTitle>Tarefas</IonTitle>
-            </IonToolbar>
-        </IonHeader>
-        <IonContent class="ion-padding">
-            <IonItem>
-                <IonInput v-model="newTask" placeholder="Digite uma tarefa" />
-                <IonButton slot="end" @click="addTask" :disabled="!newTask">Adicionar</IonButton>
+  <IonPage>
+    <IonHeader>
+      <IonToolbar>
+        <IonTitle>Lista de Tarefas</IonTitle>
+      </IonToolbar>
+    </IonHeader>
+
+    <IonContent class="ion-padding">
+
+      
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Nova Tarefa</IonCardTitle>
+        </IonCardHeader>
+
+        <IonCardContent>
+          <IonInput
+            label="Nome da tarefa"
+            label-placement="floating"
+            v-model="novaTarefa"
+            :clear-input="true"
+            placeholder="Ex: Estudar Vue.js"
+            :error-text="erroTarefa"
+            :class="{ 'ion-invalid ion-touched': erroTarefa }"
+          />
+
+          <IonButton
+            expand="block"
+            fill="solid"
+            color="primary"
+            class="ion-margin-top"
+            @click="adicionar"
+          >
+            <IonIcon :icon="addOutline" slot="start" />
+            Adicionar
+          </IonButton>
+        </IonCardContent>
+      </IonCard>
+
+      
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Minhas Tarefas ({{ tarefas.length }})</IonCardTitle>
+        </IonCardHeader>
+
+        <IonCardContent>
+          <p v-if="!tarefas.length" class="ion-text-center ion-padding">
+            Nenhuma tarefa cadastrada.
+          </p>
+
+          <IonList v-else>
+            <IonItem v-for="(t, i) in tarefas" :key="i">
+              <IonIcon slot="start" :icon="checkmarkCircleOutline" />
+              <IonLabel>{{ t }}</IonLabel>
+
+              <IonButton
+                slot="end"
+                fill="clear"
+                color="danger"
+                @click="remover(i)"
+              >
+                <IonIcon :icon="trashOutline" />
+              </IonButton>
             </IonItem>
+          </IonList>
+        </IonCardContent>
+      </IonCard>
 
-            <div class="task-list">
-                <p v-if="tarefas.length === 0" class="empty-state">Nenhuma tarefa cadastrada. Adicione a primeira!</p>
-
-                <IonItem v-for="(tarefa, idx) in tarefas" :key="idx" v-else>
-                    <IonLabel>{{ tarefa }}</IonLabel>
-                    <IonButton slot="end" fill="clear" color="danger" @click="removeTask(idx)">
-                        <IonIcon :icon="trash" />
-                    </IonButton>
-                </IonItem>
-            </div>
-        </IonContent>
-    </IonPage>
+    </IonContent>
+  </IonPage>
 </template>
 
-<script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonItem, IonInput, IonButton, IonLabel, IonIcon } from '@ionic/vue';
-import { ref } from 'vue';
-import { trash } from 'ionicons/icons';
+<script setup>
+import { ref, computed } from 'vue'
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonIcon,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent
+} from '@ionic/vue'
 
-const tarefas = ref<string[]>([]);
-const newTask = ref('');
+import {
+  addOutline,
+  trashOutline,
+  checkmarkCircleOutline
+} from 'ionicons/icons'
 
-function addTask() {
-  if (newTask.value.trim()) {
-    tarefas.value.push(newTask.value.trim());
-    newTask.value = '';
-  }
+const novaTarefa = ref('')
+const tarefas = ref([])
+
+const erroTarefa = computed(() =>
+  !novaTarefa.value.trim() ? 'Campo obrigatório' : ''
+)
+
+function adicionar() {
+  if (!novaTarefa.value.trim()) return
+  tarefas.value.push(novaTarefa.value.trim())
+  novaTarefa.value = ''
 }
 
-function removeTask(idx: number) {
-  tarefas.value.splice(idx, 1);
+function remover(index) {
+  tarefas.value.splice(index, 1)
 }
 </script>
-
-<style scoped>
-
- .back-button {
-  margin-right: 8px;
-  padding: 0;
-  color: var(--ion-color-primary);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  height: auto;
- }
-
-
-</style>
