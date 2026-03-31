@@ -30,7 +30,7 @@
             fill="solid"
             color="primary"
             class="ion-margin-top"
-            @click="adicionar"
+            @click="adicionarTarefa"
           >
             <IonIcon :icon="addOutline" slot="start" />
             Adicionar
@@ -50,15 +50,15 @@
           </p>
 
           <IonList v-else>
-            <IonItem v-for="(t, i) in tarefas" :key="i">
+            <IonItem v-for="(t,) in tarefas" :key="t.id">
               <IonIcon slot="start" :icon="checkmarkCircleOutline" />
-              <IonLabel>{{ t }}</IonLabel>
+              <IonLabel>{{ t.texto }}</IonLabel>
 
               <IonButton
                 slot="end"
                 fill="clear"
                 color="danger"
-                @click="remover(i)"
+                @click="remover(t.id)"
               >
                 <IonIcon :icon="trashOutline" />
               </IonButton>
@@ -71,7 +71,8 @@
   </IonPage>
 </template>
 
-<script setup>
+<script setup lang='ts'>
+import { useTarefa } from '../composable/useTarefa.ts'
 import { ref, computed } from 'vue'
 import {
   IonPage,
@@ -97,20 +98,18 @@ import {
   checkmarkCircleOutline
 } from 'ionicons/icons'
 
+const { tarefas, busca, filtroAtivo, tarefasFiltradas,
+   adicionar, remover, concluir } = useTarefa()
+
 const novaTarefa = ref('')
-const tarefas = ref([])
 
 const erroTarefa = computed(() =>
   !novaTarefa.value.trim() ? 'Campo obrigatório' : ''
 )
 
-function adicionar() {
+function adicionarTarefa() {
   if (!novaTarefa.value.trim()) return
-  tarefas.value.push(novaTarefa.value.trim())
+  adicionar(novaTarefa.value.trim())
   novaTarefa.value = ''
-}
-
-function remover(index) {
-  tarefas.value.splice(index, 1)
 }
 </script>
