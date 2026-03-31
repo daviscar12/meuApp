@@ -98,8 +98,8 @@ import {
   checkmarkCircleOutline
 } from 'ionicons/icons'
 
-const { tarefas, busca, filtroAtivo, tarefasFiltradas,
-   adicionar, remover, concluir } = useTarefa()
+const { tarefas,
+   adicionar, remover } = useTarefa()
 
 const novaTarefa = ref('')
 
