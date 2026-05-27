@@ -29,7 +29,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 function goToTarefas() {
-  router.push('/Tarefas');
+  router.push('/tabs/tarefas');
 }
 </script>
 

@@ -38,11 +38,11 @@ export function useTarefa() {
         if (tarefa) tarefa.feita = !tarefa.feita;
     }
 
-    return { tarefas, busca, filtroAtivo, tarefasFiltradas, totalPendentes, adicionar, remover, concluir };
-
     watch(totalPendentes, (valor) => {
         if (valor === 0 && tarefas.value.length > 0) {
             alert('Parabéns! Você concluiu todas as tarefas!');
         }
     })
+
+    return { tarefas, busca, filtroAtivo, tarefasFiltradas, totalPendentes, adicionar, remover, concluir };
 }

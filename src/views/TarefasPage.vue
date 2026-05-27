@@ -50,7 +50,7 @@
           </p>
 
           <IonList v-else>
-            <IonItem v-for="(t,) in tarefas" :key="t.id">
+            <IonItem v-for="t in tarefas" :key="t.id">
               <IonIcon slot="start" :icon="checkmarkCircleOutline" />
               <IonLabel>{{ t.texto }}</IonLabel>
 
