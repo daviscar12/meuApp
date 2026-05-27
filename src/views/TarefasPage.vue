@@ -58,7 +58,7 @@
                 slot="end"
                 fill="clear"
                 color="danger"
-                @click.stop="remover(t.id)"
+                @click.stop="confirmarExclusao(t.id)"
               >
                 <IonIcon :icon="trashOutline" />
               </IonButton>
@@ -90,7 +90,8 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
-  useIonRouter
+  useIonRouter,
+  alertController
 } from '@ionic/vue'
 
 import {
@@ -112,6 +113,27 @@ function adicionarTarefa() {
   if (!novaTarefa.value.trim()) return
   adicionar(novaTarefa.value.trim())
   novaTarefa.value = ''
+}
+
+async function confirmarExclusao(id: number) {
+  const alert = await alertController.create({
+    header: 'Excluir tarefa?',
+    message: 'Esta ação não pode ser desfeita.',
+    buttons: [
+      {
+        text: 'Cancelar',
+        role: 'cancel'
+      },
+      {
+        text: 'Excluir',
+        role: 'destructive',
+        handler: () => {
+          remover(id)
+        }
+      }
+    ]
+  })
+  await alert.present()
 }
 
 function irParaDetalhe(id: number) {
