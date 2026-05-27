@@ -50,7 +50,7 @@
           </p>
 
           <IonList v-else>
-            <IonItem v-for="t in tarefas" :key="t.id">
+            <IonItem button @click="irParaDetalhe(t.id)" v-for="t in tarefas" :key="t.id">
               <IonIcon slot="start" :icon="checkmarkCircleOutline" />
               <IonLabel>{{ t.texto }}</IonLabel>
 
@@ -58,7 +58,7 @@
                 slot="end"
                 fill="clear"
                 color="danger"
-                @click="remover(t.id)"
+                @click.stop="remover(t.id)"
               >
                 <IonIcon :icon="trashOutline" />
               </IonButton>
@@ -89,7 +89,8 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonCardContent
+  IonCardContent,
+  useIonRouter
 } from '@ionic/vue'
 
 import {
@@ -98,8 +99,8 @@ import {
   checkmarkCircleOutline
 } from 'ionicons/icons'
 
-const { tarefas,
-   adicionar, remover } = useTarefa()
+const { tarefas, adicionar, remover } = useTarefa()
+const ionRouter = useIonRouter()
 
 const novaTarefa = ref('')
 
@@ -111,5 +112,9 @@ function adicionarTarefa() {
   if (!novaTarefa.value.trim()) return
   adicionar(novaTarefa.value.trim())
   novaTarefa.value = ''
+}
+
+function irParaDetalhe(id: number) {
+  ionRouter.push(`/tabs/tarefas/${id}`)
 }
 </script>
