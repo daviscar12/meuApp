@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+import { useUsuarioStore } from '../composable/useUsuarioStore'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -34,6 +35,16 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, _, next) => {
+  const usuStore = useUsuarioStore()
+
+  if (to.meta.requerNome && !usuStore.nome.value) {
+    next('/tabs/tarefas')
+  } else {
+    next()
+  }
 })
 
 export default router
