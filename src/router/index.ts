@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import { useUsuarioStore } from '../composable/useUsuarioStore'
+// import { useUsuarioStore } from '../composable/useUsuarioStore' // não usado aqui: PerfilPage gerencia a necessidade de nome
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -37,14 +37,9 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, _, next) => {
-  const usuStore = useUsuarioStore()
-
-  if (to.meta.requerNome && !usuStore.nome.value) {
-    next('/tabs/tarefas')
-  } else {
-    next()
-  }
-})
+// Mantemos a flag `meta.requerNome` apenas como indicador.
+// Não redirecionamos mais globalmente — a própria `PerfilPage` mostra
+// um formulário quando `nome` não estiver preenchido.
+// (Evita loop de navegação e melhora UX.)
 
 export default router
